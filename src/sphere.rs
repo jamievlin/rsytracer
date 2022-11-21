@@ -21,28 +21,11 @@ impl Object for Sphere {
 
         let sqrt_delta = delta.sqrt();
         let base = -ray.dir.dot(&diff);
-        let distance1 = {
-            let distance = base + sqrt_delta;
-            if distance > config::MIN_RAY_DISTANCE {
-                Some(distance)
-            } else {
-                None
-            }
-        };
-        let distance2 = {
-            let distance = base - sqrt_delta;
-            if distance > config::MIN_RAY_DISTANCE {
-                Some(distance)
-            } else {
-                None
-            }
-        };
-        let min_distance = match (distance1, distance2) {
-            (Some(d1), Some(d2)) => Some(d1.min(d2)),
-            (Some(d1), None) => Some(d1),
-            (None, Some(d2)) => Some(d2),
-            (None, None) => None,
-        };
+
+        let min_distance = [base + sqrt_delta, base - sqrt_delta]
+            .into_iter()
+            .filter(|&distance| distance > config::MIN_RAY_DISTANCE)
+            .min_by(Float::total_cmp);
 
         match min_distance {
             Some(min_distance) => Some(Intersection {
