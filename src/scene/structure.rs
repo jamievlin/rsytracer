@@ -1,16 +1,20 @@
 use crate::scene::TransformData;
 
-struct Scene {
+pub struct Scene {
     child_nodes: Vec<Box<SceneNode>>,
-    drawables: Vec<Box<dyn Drawable>>
+    drawables: Vec<DrawableObjectData>
 }
 
-struct SceneNode {
+pub struct SceneNode {
     transform: TransformData,
     scene: Scene
 }
 
-trait Drawable {
-
+pub enum DrawableObjectData {
+    Sphere { radius: f32 },
 }
 
+pub struct DrawableObject {
+    pub position: glm::Vec3,
+    pub drawable: DrawableObjectData
+}
